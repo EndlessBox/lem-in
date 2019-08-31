@@ -23,13 +23,9 @@ int			ft_read_ants_nbr(t_container *cont)
 	int		pos;
 
 	pos = 0;
-	while (cont->content[pos] != '\n')
-	{
-		if (!ft_isdigit(cont->content[pos]) && pos >= 10)
-			ft_free_exit(cont, RED("Invalid number of ants"));
-		cont->nbr_ants = cont->nbr_ants * 10 + (cont->content[pos] - '0');
+	while (cont->content[pos] != '\n' && cont->content[pos])
 		pos++;
-	}
+	cont->nbr_ants = ft_atoi(cont->content);
 	if (cont->nbr_ants <= 0)
 		ft_free_exit(cont, RED("Invalid number of ants"));
 	return (pos + 1);
@@ -83,17 +79,17 @@ int			ft_read_comment(t_container *cont, int line)
 	if (cont->content[line + 1] == '#' &&
 			(name = ft_findchar(cont->content + line + pos + 1, ' ')) > 0)
 	{
-		if (cont->content[line + pos + 1] == '#')
-			ft_free_exit(cont, RED("invalid room"));
+		//if (cont->content[line + pos + 1] == '#')
+			//ft_free_exit(cont, RED("invalid room"));
 		if (ft_strncmp("##start", cont->content + line, pos) == 0)
 		{
-			if (cont->source)
+			if (!cont->source)
 				ft_free_exit(cont, RED("duplicate room start"));
 			cont->source = ft_strndup(cont->content + line + pos + 1, name);
 		}
 		else if (ft_strncmp("##end", cont->content + line, pos) == 0)
 		{
-			if (cont->sink)
+			if (!cont->sink)
 				ft_free_exit(cont, RED("duplicate room end"));
 			cont->sink = ft_strndup(cont->content + line + pos + 1, name);
 		}

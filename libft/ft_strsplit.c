@@ -90,8 +90,7 @@ char		**ft_strsplit(const char *s, char c)
 {
 	int		*t;
 	char	**splited;
-	int		j;
-	int		i;
+		int		j;
 
 	if (s == 0)
 		return (0);
@@ -108,7 +107,6 @@ char		**ft_strsplit(const char *s, char c)
 			return (0);
 		j++;
 	}
-	i = 0;
 	splited = ft_asssign(splited, s, c);
 	return (splited);
 }

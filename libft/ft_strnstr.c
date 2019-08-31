@@ -16,12 +16,10 @@ char		*ft_strnstr(const char *str, const char *to_find, size_t n)
 {
 	int		c;
 	int		len;
-	int		lenstr;
 	size_t	i;
 	char	*res;
 
 	len = ft_strlen(to_find);
-	lenstr = ft_strlen(str);
 	i = 0;
 	while (*str && i < n)
 	{

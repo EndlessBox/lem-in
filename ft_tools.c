@@ -28,7 +28,7 @@ t_room		*ft_new_t_room(char *s, int len)
 			return (NULL);
 	new->neighbors = NULL;
 	new->vis = 0;
-	new->parents = NULL;
+	new->parent = NULL;
 	return (new);
 }
 

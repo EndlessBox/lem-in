@@ -70,9 +70,10 @@ void			store_rooms(t_container *container)
 	queue = ft_new_queue();
 	room = ft_get_value(container->hash_table, container->source, container->power);
 	room->vis = 1;
+	room->parent = NULL;
 	ft_enque(queue, room);
-	//bfs(queue);
-	print_hash_table(container->hash_table);
+	bfs(queue, container);
+	//print_hash_table(container->hash_table);
 }
 
 int				main(void)

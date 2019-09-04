@@ -31,7 +31,7 @@ typedef struct		s_room
 {
 	char			*name;
 	int				vis:1;
-	t_addr			*parents;
+	void			*parent;
 	t_addr			*neighbors;
 }					t_room;
 
@@ -105,6 +105,6 @@ void				ft_free_t_room(t_room *head);
 **	function to test ! 
 */
 
-int     bfs(t_queue *q);
+void    bfs(t_queue *q, t_container *container);
 
 #endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_and_store.c                                   :+:      :+:    :+:   */
+/*   read_rooms.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nouhaddo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nouhaddo <nouhaddo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 17:10:08 by nouhaddo          #+#    #+#             */
-/*   Updated: 2019/08/01 17:05:20 by nouhaddo         ###   ########.fr       */
+/*   Updated: 2019/10/25 03:02:15 by nouhaddo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,25 @@
 int			ft_read_ants_nbr(t_container *cont)
 {
 	int		pos;
+	int		len;
+	long	n;
 
 	pos = 0;
-	while (cont->content[pos] != '\n' && cont->content[pos])
+	n = 0;
+	if (cont->content[pos] == '#')
+		ft_read_comment(cont, &pos);
+	if (cont->content[pos] == '+')
 		pos++;
-	cont->nbr_ants = ft_atoi(cont->content);
-	if (cont->nbr_ants <= 0)
-		ft_free_exit(cont, RED("Invalid number of ants"));
-	return (pos + 1);
+	len = 0;
+	while (ft_isdigit(cont->content[pos + len]) && len < 10)
+	{
+		n = n * 10 + (cont->content[pos + len] - '0');
+		len++;
+	}
+	if (cont->content[pos + len] != '\n' || n > MX_INT || n <= 0)
+		ft_free_exit(cont, 0);
+	cont->nbr_ants = n;
+	return (len + pos + 1);
 }
 
 /*
@@ -37,29 +48,28 @@ int			ft_read_ants_nbr(t_container *cont)
 **	otherwise if an error occur the function exit and free all memory malloced
 */
 
-int			ft_check_coordinates(t_container *cont, int curr)
+int			ft_check_coordinates(t_container *cont, int cur)
 {
 	int		pos;
-	int		error;
 
-	pos = curr;
-	error = 0;
-	if (cont->content[pos] == '-')
+	pos = 0;
+	if (cont->content[cur] == '-' || cont->content[cur] == '+')
 		pos++;
-	while (cont->content[pos] != ' ' && cont->content[pos] != '\n' &&
-			cont->content[pos] && ft_isdigit(cont->content[pos]))
+	while (cont->content[cur + pos] && ft_isdigit(cont->content[cur + pos]))
 		pos++;
-	if (cont->content[pos] != ' ')
-		error = 1;
-	pos++;
-	if (cont->content[pos] == '-')
+	if (cont->content[cur + pos] != ' ' || pos == 0 || pos > 9 ||
+		(pos == 1 && (cont->content[cur] == '+' || cont->content[cur] == '-')))
+		ft_free_exit(cont, 0);
+	cur += pos + 1;
+	pos = 0;
+	if (cont->content[pos] == '-' || cont->content[cur] == '+')
 		pos++;
-	while (cont->content[pos] != ' ' && cont->content[pos] != '\n' &&
-			cont->content[pos] && ft_isdigit(cont->content[pos]) && !error)
+	while (cont->content[cur + pos] && ft_isdigit(cont->content[cur + pos]))
 		pos++;
-	if (error || cont->content[pos] != '\n' || !cont->content[pos])
-		ft_free_exit(cont, RED("Invalid coordinations of room"));
-	return (pos + 1);
+	if (cont->content[cur + pos] != '\n' || pos == 0 || pos > 9 ||
+			(pos == 1 && !ft_isdigit(cont->content[cur])))
+		ft_free_exit(cont, 0);
+	return (cur + pos + 1);
 }
 
 /*
@@ -68,33 +78,31 @@ int			ft_check_coordinates(t_container *cont, int curr)
 **	otherwise if an error occur the function exit and free all memory malloced
 */
 
-int			ft_read_comment(t_container *cont, int line)
+void		ft_read_comment(t_container *c, int *line)
 {
-	int		pos;
-	int		name;
+	int		n;
 
-	pos = 0;
-	while (cont->content[line + pos] != '\n' && cont->content[line + pos])
-		pos++;
-	if (cont->content[line + 1] == '#' &&
-			(name = ft_findchar(cont->content + line + pos + 1, ' ')) > 0)
+	n = ft_findchar(c->content + *line, '\n');
+	if (n > 0 && ft_strncmp("##start\n", c->content + *line, 8) == 0)
 	{
-		//if (cont->content[line + pos + 1] == '#')
-			//ft_free_exit(cont, RED("invalid room"));
-		if (ft_strncmp("##start", cont->content + line, pos) == 0)
-		{
-			if (!cont->source)
-				ft_free_exit(cont, RED("duplicate room start"));
-			cont->source = ft_strndup(cont->content + line + pos + 1, name);
-		}
-		else if (ft_strncmp("##end", cont->content + line, pos) == 0)
-		{
-			if (!cont->sink)
-				ft_free_exit(cont, RED("duplicate room end"));
-			cont->sink = ft_strndup(cont->content + line + pos + 1, name);
-		}
+		*line += n + 1;
+		if (c->source != NULL || (n = ft_findchar(c->content + *line, ' ')) < 0)
+			ft_free_exit(c, 0);
+		c->source = ft_strndup(c->content + *line, n);
 	}
-	return (pos + 1);
+	else if (n > 0 && ft_strncmp("##end\n", c->content + *line, 6) == 0)
+	{
+		*line += n + 1;
+		if (c->sink != NULL || (n = ft_findchar(c->content + *line, ' ')) < 0)
+			ft_free_exit(c, 0);
+		c->sink = ft_strndup(c->content + *line, n);
+	}
+	else
+	{
+		*line += (n < 0 ? ft_strlen(c->content + *line) : n + 1);
+		if (c->content[*line] == '#')
+			ft_read_comment(c, line);
+	}
 }
 
 /*
@@ -113,21 +121,18 @@ int			ft_read_rooms(t_container *c, int line)
 	{
 		pos = 0;
 		if (c->content[line] == '#')
-		{
-			line += ft_read_comment(c, line);
-			continue ;
-		}
-		while (c->content[line + pos] != ' ' && c->content[line + pos] != '\n'
-				&& c->content[line + pos] && c->content[line + pos] != '-')
+			ft_read_comment(c, &line);
+		while (c->content[line + pos] && c->content[line + pos] != ' ' &&
+				c->content[line + pos] != '\n')
 			pos++;
-		if (c->content[pos + line] == '-')
+		if (!c->content[line + pos] || c->content[pos + line] == '\n')
 			return (line);
 		if (c->content[pos + line] != ' ' || c->content[line] == 'L')
-			ft_free_exit(c, RED("Invalid Room name and coord structure"));
+			ft_free_exit(c, 0);
 		if (!(new_room = ft_new_t_room(c->content + line, pos)))
-			ft_free_exit(c, RED("Can't allocate t_room"));
+			ft_free_exit(c, 0);
 		if (!(ft_insert_value(c->hash_table, new_room, c->power)))
-			ft_free_exit(c, RED("Bad Insertion"));
+			ft_free_exit(c, 0);
 		line = ft_check_coordinates(c, line + pos + 1);
 	}
 	return (line);

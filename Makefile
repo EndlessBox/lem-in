@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makerfile                                          :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nouhaddo <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: nouhaddo <nouhaddo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/01 14:40:46 by nouhaddo          #+#    #+#              #
-#    Updated: 2019/08/01 17:06:53 by nouhaddo         ###   ########.fr        #
+#    Updated: 2019/10/24 08:30:03 by nouhaddo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,25 +17,34 @@ SRC = main.c\
 	  read_connections.c\
 	  hash_functions.c\
 	  ft_tools.c\
+	  ft_tools2.c\
 	  ft_queue.c\
-	  bfs.c
+	  bfs.c\
+	  paths.c\
+	  nodes.c\
+	  score.c\
+	  move_ants.c\
+	  ft_clean.c\
+	  ft_group.c
 
 OBJ = $(SRC:.c=.o)
 
 FLAG = -Wall -Wextra -Werror
 
-LIBFT_OBJ = ./libft/*.o
+LIBFT = ./libft
 
 all: $(NAME)
 
-$(NAME):
+$(NAME): $(OBJ)
 	make -C ./libft
-	gcc $(FLAG) -c $(SRC)
-	gcc $(OBJ) $(LIBFT_OBJ) -o $(NAME)
+	gcc $(OBJ)  $(LIBFT)/libft.a -o $(NAME)
+
+$(OBJ): %.o : %.c
+	gcc $(FLAGS) -c $< -o $@
 
 clean:
 	make -C ./libft clean
-	rm -rf $(OBJ) *.h.gch
+	rm -rf $(OBJ)
 
 fclean: clean
 	make -C ./libft fclean

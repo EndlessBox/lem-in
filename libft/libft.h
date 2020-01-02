@@ -6,7 +6,7 @@
 /*   By: nouhaddo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/05 15:09:51 by nouhaddo          #+#    #+#             */
-/*   Updated: 2019/08/05 14:25:37 by ybouladh         ###   ########.fr       */
+/*   Updated: 2019/11/15 23:28:17 by nouhaddo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@
 # define D_MX_SIZE 2044
 # define LD_BIAS 16383
 # define LD_MX_SIZE 32766
+# define MX_INT 2147483647
+# define MN_INT -2147483648
+# define MX_READ 1000000
+# define BUFF_SIZE 1000
 
 /*
 ** ----------------------------------------------------------------------------
@@ -63,7 +67,7 @@ typedef struct		s_bool
 }					t_bool;
 
 /*
-**	I Added in the following structure two new things 
+**	I Added in the following structure two new things
 **	1 - int	visited;
 ** 	2 - void *parent
 */
@@ -87,6 +91,13 @@ typedef struct		s_addr
 	void			*addr;
 	struct s_addr	*next;
 }					t_addr;
+
+typedef struct		s_link
+{
+	void			*link;
+	int				cost;
+	struct s_link	*next;
+}					t_link;
 
 /*
 ** ----------------------------------------------------------------------------
@@ -178,6 +189,7 @@ void				ft_free_t_str(t_str *head);
 t_addr				*ft_new_t_addr(void *addr);
 void				ft_free_t_addr(t_addr *head);
 t_addr				*ft_push_t_addr(t_addr *head, void *addr);
+t_addr				*ftr_remove_t_addr(t_addr *head, t_addr *node);
 
 /*
 ** ----------------------------------------------------------------------------
@@ -192,6 +204,16 @@ int					ft_isascii(int c);
 int					ft_isprint(int c);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
+
+/*
+** ----------------------------------------------------------------------------
+** 						  	   links functions
+** ----------------------------------------------------------------------------
+*/
+
+t_link				*ft_new_t_link(void *addr);
+t_link				*ft_push_t_link(t_link *head, void *addr);
+void				ft_free_t_link(t_link *head);
 
 /*
 ** ----------------------------------------------------------------------------

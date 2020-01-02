@@ -6,7 +6,7 @@
 /*   By: nouhaddo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/07 22:23:48 by nouhaddo          #+#    #+#             */
-/*   Updated: 2018/10/09 13:49:36 by nouhaddo         ###   ########.fr       */
+/*   Updated: 2019/10/23 01:46:09 by nouhaddo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char		**ft_strsplit(const char *s, char c)
 {
 	int		*t;
 	char	**splited;
-		int		j;
+	int		j;
 
 	if (s == 0)
 		return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_connections.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ybouladh <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nouhaddo <nouhaddo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 18:30:30 by ybouladh          #+#    #+#             */
-/*   Updated: 2019/08/05 18:30:35 by ybouladh         ###   ########.fr       */
+/*   Updated: 2019/11/10 16:08:32 by ybouladh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ int		set_connection(t_room *room1, t_room *room2)
 		return (0);
 	if (room1 != room2)
 	{
-		room1->neighbors = ft_push_t_addr(room1->neighbors, room2);
-		room2->neighbors = ft_push_t_addr(room2->neighbors, room1);
-		if (!room1->neighbors || !room2->neighbors)
+		if (!(room1->neighb_link = ft_push_t_link(room1->neighb_link, room2)))
+			return (0);
+		if (!(room2->neighb_link = ft_push_t_link(room2->neighb_link, room1)))
 			return (0);
 	}
 	return (1);
@@ -41,11 +41,11 @@ char	*get_first(t_container *c, int *pos, int line)
 {
 	char	*temp;
 
-	while (c->content[line + (*pos)] != '-' && c->content[line + (*pos)] != '\n'
-			&& c->content[line + (*pos)] != ' ' && c->content[line + (*pos)])
+	while (c->content[line + (*pos)] && c->content[line + (*pos)] != '-' &&
+			c->content[line + (*pos)] != '\n')
 		(*pos)++;
 	if (c->content[line + (*pos)] != '-')
-		ft_free_exit(c, RED("invalid connection between rooms"));
+		ft_free_exit(c, 0);
 	temp = ft_strndup(c->content + line, (*pos));
 	return (temp);
 }
@@ -60,11 +60,11 @@ char	*get_second(t_container *c, int *pos, int line, int first_break)
 	char	*temp;
 
 	(*pos)++;
-	while (c->content[line + (*pos)] != '\n' && c->content[line + (*pos)] &&
-		c->content[line + (*pos)] != ' ' && c->content[line + (*pos)] != '-')
+	while (c->content[line + (*pos)] && c->content[line + (*pos)] != '\n' &&
+			c->content[line + *pos] != ' ')
 		(*pos)++;
 	if (c->content[line + (*pos)] != '\n')
-		ft_free_exit(c, RED("invalid connection between rooms"));
+		ft_free_exit(c, 0);
 	temp = ft_strndup(c->content + line + first_break, (*pos) - first_break);
 	return (temp);
 }
@@ -87,18 +87,18 @@ int		get_relations(t_container *c, int line)
 	{
 		pos = 0;
 		if (c->content[line] == '#')
-		{
-			line += ft_read_comment(c, line);
-			continue ;
-		}
+			ft_read_comment(c, &line);
+		if (!c->content[line])
+			break ;
 		temp = get_first(c, &pos, line);
+		room1 = ft_get_value(c, temp);
+		free(temp);
 		first_break = pos + 1;
-		room1 = ft_get_value(c->hash_table, temp, c->power);
-		free(temp);
 		temp = get_second(c, &pos, line, first_break);
-		room2 = ft_get_value(c->hash_table, temp, c->power);
+		room2 = ft_get_value(c, temp);
 		free(temp);
-		set_connection(room1, room2);
+		if (!set_connection(room1, room2))
+			ft_free_exit(c, 0);
 		line += pos + 1;
 	}
 	return (1);

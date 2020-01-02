@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_new_t_addr.c                                    :+:      :+:    :+:   */
+/*   ft_new_t_link.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nouhaddo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ybouladh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/01 15:19:39 by nouhaddo          #+#    #+#             */
-/*   Updated: 2019/08/01 17:30:58 by nouhaddo         ###   ########.fr       */
+/*   Created: 2019/09/22 18:01:10 by ybouladh          #+#    #+#             */
+/*   Updated: 2019/10/24 02:23:49 by ybouladh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_addr		*ft_new_t_addr(void *addr)
+t_link		*ft_new_t_link(void *addr)
 {
-	t_addr	*new;
+	t_link	*new;
 
-	if (!(new = (t_addr*)malloc(sizeof(t_addr))))
+	if (!(new = (t_link*)malloc(sizeof(t_link))))
 		return (NULL);
-	new->addr = addr;
+	new->cost = 1;
+	new->link = addr;
 	new->next = NULL;
 	return (new);
 }

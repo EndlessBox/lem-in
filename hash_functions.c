@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nouhaddo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nouhaddo <nouhaddo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 20:26:28 by nouhaddo          #+#    #+#             */
-/*   Updated: 2019/08/01 17:06:22 by nouhaddo         ###   ########.fr       */
+/*   Updated: 2019/10/22 21:45:18 by nouhaddo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ int				ft_insert_value(t_hash **hash_table, t_room *new_room,
 	return (1);
 }
 
-t_room			*ft_get_value(t_hash **hash_table, char *key, long long *power)
+t_room			*ft_get_value(t_container *c, char *key)
 {
 	long long	hash;
 	t_hash		*curr;
 
-	hash = ft_hash(key, power) % H_SIZE;
-	curr = hash_table[hash];
+	hash = ft_hash(key, c->power) % H_SIZE;
+	curr = c->hash_table[hash];
 	while (curr && ft_strcmp(key, curr->room->name) != 0)
 		curr = curr->next;
 	return (curr ? curr->room : NULL);
@@ -104,4 +104,5 @@ void			ft_free_hash_table(t_hash **hash_table)
 		}
 		i++;
 	}
+	free(hash_table);
 }

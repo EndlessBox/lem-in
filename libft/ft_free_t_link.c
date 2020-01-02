@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_t_addr.c                                   :+:      :+:    :+:   */
+/*   ft_free_t_link.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nouhaddo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ybouladh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/01 15:22:25 by nouhaddo          #+#    #+#             */
-/*   Updated: 2019/08/04 23:19:05 by nouhaddo         ###   ########.fr       */
+/*   Created: 2019/09/22 18:52:13 by ybouladh          #+#    #+#             */
+/*   Updated: 2019/09/22 18:52:15 by ybouladh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		ft_free_t_addr(t_addr *head)
+void		ft_free_t_link(t_link *head)
 {
 	if (head)
 	{
-		ft_free_t_addr(head->next);
+		ft_free_t_link(head->next);
 		free(head);
 	}
 }

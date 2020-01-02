@@ -1,34 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_push_t_addr.c                                   :+:      :+:    :+:   */
+/*   ft_push_t_link.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nouhaddo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ybouladh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/01 16:24:25 by nouhaddo          #+#    #+#             */
-/*   Updated: 2019/08/01 17:30:53 by nouhaddo         ###   ########.fr       */
+/*   Created: 2019/09/22 18:47:02 by ybouladh          #+#    #+#             */
+/*   Updated: 2019/10/23 01:48:18 by nouhaddo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_addr		*ft_push_t_addr(t_addr *head, void *addr)
+t_link		*ft_push_t_link(t_link *head, void *addr)
 {
-	t_addr	*curr;
+	t_link	*curr;
 
 	curr = head;
 	if (!head)
-		return (ft_new_t_addr(addr));
+		return (ft_new_t_link(addr));
 	else
 	{
 		while (curr->next)
 		{
-			if (curr->addr == addr)
+			if (curr->link == addr)
 				return (head);
 			curr = curr->next;
 		}
-		if (curr->addr != addr)
-			if(!(curr->next = ft_new_t_addr(addr)))
+		if (curr->link != addr)
+			if (!(curr->next = ft_new_t_link(addr)))
 				return (NULL);
 	}
 	return (head);

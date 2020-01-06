@@ -17,3 +17,5 @@ Algorithms & AI
 - Max Flow algorithms.
 - Hash-tables.
 - Dynamic Arrays.
+
+# NB : READ THE SUBJECT FOR MORE INFORMATIONS.

@@ -11,5 +11,9 @@ Imperative programming
 Rigor
 Algorithms & AI
 
-#
-Search : Graph Theory, BFS/DFS "Graph Traversal", Max Flow algorithms, Hash-tables, Dynamic Arrays.
+# Search
+- Graph Theory.
+- BFS/DFS "Graph Traversal".
+- Max Flow algorithms.
+- Hash-tables.
+- Dynamic Arrays.
